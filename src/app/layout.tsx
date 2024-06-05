@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/common/Header";
+import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "@descope/nextjs-sdk";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark, neobrutalism } from "@clerk/themes";
+// import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +22,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider
+      appearance={
+        {
+          // baseTheme: [dark],
+        }
+      }
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ThemeProvider attribute="class">
+            <div
+              className="dark:bg-gray-800 dark:text-gray-100 transition-all min-h-screen
+          h-full"
+            >
+              <div className="max-w-6xl mx-auto ">
+                <Header />
+                {children}
+                <Toaster />
+              </div>
+            </div>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
